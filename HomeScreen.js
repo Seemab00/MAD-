@@ -1,238 +1,259 @@
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  TextInput,
-  TouchableOpacity,
-  Image,
-  FlatList,
-} from 'react-native';
-import { GlobalStyles } from '../styles/GlobalStyles';
-import { Ionicons, MaterialIcons, FontAwesome, Feather } from '@expo/vector-icons';
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
+
+// Import your product images
+const productImages = {
+  product1: require('../../assets/image/product1.jpg'),
+  product2: require('../../assets/image/product2.jpg'),
+  product3: require('../../assets/image/product3.jpg'),
+  product4: require('../../assets/image/product4.jpg'),
+  product5: require('../../assets/image/product5.jpg'),
+  product6: require('../../assets/image/product6.jpg'),
+};
 
 const HomeScreen = ({ navigation }) => {
-  const [activeTab, setActiveTab] = useState('home');
-
-  // Sample data
-  const cakes = [
+  // Product data array
+  const products = [
     {
-      id: '1',
-      name: 'Chocolate Fantasy',
-      type: 'Cake',
-      price: '$24.99',
-      image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+      id: 1,
+      name: "Classic Comfort Tee",
+      price: "₨ 11,999",
+      image: productImages.product1
     },
     {
-      id: '2',
-      name: 'Red Velvet',
-      type: 'Cake',
-      price: '$22.99',
-      image: 'https://images.unsplash.com/photo-1586788680434-30d324b2d46f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+      id: 2,
+      name: "Urban Style Hoodie",
+      price: "₨ 9,850",
+      image: productImages.product2
     },
     {
-      id: '3',
-      name: 'Strawberry Delight',
-      type: 'Cake',
-      price: '$26.99',
-      image: 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+      id: 3,
+      name: "Tropical Breeze Set",
+      price: "₨ 14,750",
+      image: productImages.product3
     },
+    {
+      id: 4,
+      name: "Cozy Winter Set",
+      price: "₨ 17,499",
+      image: productImages.product4
+    },
+    {
+      id: 5,
+      name: "Beach Wave Collection",
+      price: "₨ 10,999",
+      image: productImages.product5
+    },
+    {
+      id: 6,
+      name: "Mountain Adventure Gear",
+      price: "₨ 12,850",
+      image: productImages.product6
+    }
   ];
-
-  const cupcakes = [
-    {
-      id: '1',
-      name: 'Vanilla Dream',
-      type: 'Cupcake',
-      price: '$3.99',
-      image: 'https://images.unsplash.com/photo-1614707267537-b85aaf00c4b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-    },
-    {
-      id: '2',
-      name: 'Chocolate Chip',
-      type: 'Cupcake',
-      price: '$4.49',
-      image: 'https://images.unsplash.com/photo-1603532648955-039310d9ed75?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-    },
-    {
-      id: '3',
-      name: 'Lemon Zest',
-      type: 'Cupcake',
-      price: '$3.79',
-      image: 'https://images.unsplash.com/photo-1486427944299-d1955d23e34d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-    },
-  ];
-
-  const ProductCard = ({ product }) => (
-    <View style={GlobalStyles.productCard}>
-      <Image
-        source={{ uri: product.image }}
-        style={{
-          width: '100%',
-          height: 120,
-          borderTopLeftRadius: 15,
-          borderTopRightRadius: 15,
-        }}
-        resizeMode="cover"
-      />
-      <View style={{ padding: 8 }}>
-        <Text style={GlobalStyles.productName}>{product.name}</Text>
-        <Text style={GlobalStyles.productType}>{product.type}</Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginTop: 5,
-          }}
-        >
-          <Text style={GlobalStyles.productPrice}>{product.price}</Text>
-          <TouchableOpacity style={GlobalStyles.iconButton}>
-            <Ionicons name="bag-add" size={18} color="#bd194fff" />
-          </TouchableOpacity>
-        </View>
-      </View>
-    </View>
-  );
-
-  const CategorySection = ({ title, data }) => (
-    <View>
-      <Text style={GlobalStyles.sectionTitle}>{title}</Text>
-      <View style={{ height: 235 }}>
-        <FlatList
-          horizontal
-          data={data}
-          renderItem={({ item }) => <ProductCard product={item} />}
-          keyExtractor={(item) => item.id}
-          showsHorizontalScrollIndicator={false}
-          Ionicons name="chevron-forward" size={24} color="#bd194fff" 
-          contentContainerStyle={{ paddingHorizontal: 20 }}
-        />
-        <View
-          style={{
-            position: 'absolute',
-            right: 8,
-            top: '50%',
-            marginTop: -12,
-          }}
-        >
-          <Ionicons name="chevron-forward" size={24} color="#bd194fff" />
-        </View>
-      </View>
-    </View>
-  );
-
-  // Bottom navigation items
-  const bottomTabs = [
-    { id: 'home', name: 'Home', icon: 'home' },
-    { id: 'cart', name: 'Cart', icon: 'shopping-cart' },
-    { id: 'orders', name: 'My Order', icon: 'receipt' },
-    { id: 'offers', name: 'Offer', icon: 'gift' },
-    { id: 'settings', name: 'Setting', icon: 'settings' },
-  ];
-
-  const handleTabPress = (tabId) => {
-    setActiveTab(tabId);
-    // You can add navigation logic here when you create other screens
-    // For now, it will just change the active tab state
-  };
 
   return (
-    <View style={GlobalStyles.container}>
+    <ScrollView style={styles.container}>
       {/* Header */}
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          paddingHorizontal: 16,
-          paddingVertical: 15,
-          paddingTop: 35,
-          backgroundColor: '#FFFFFF',
-          elevation: 2,
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.1,
-          shadowRadius: 3,
-        }}
-      >
-        <Text style={GlobalStyles.appNameText}>Bakery App</Text>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <TouchableOpacity style={{ marginHorizontal: 12 }}>
-            <Ionicons name="notifications-outline" size={24} color="#bd194fff" />
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.iconButton}>
+          <Text style={styles.iconText}>≡</Text>
+        </TouchableOpacity>
+
+        <Text style={styles.logo}>STYLEHUB</Text>
+        
+
+        <View style={styles.rightIcons}>
+          <TouchableOpacity style={styles.iconButton}>
+            <Text style={styles.iconText}>⌕</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{ marginHorizontal: 12 }}>
-            <FontAwesome name="user-circle" size={24} color="#bd194fff" />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <ScrollView style={{ flex: 1 }}>
-        {/* Search Bar */}
-        <View style={[GlobalStyles.searchBar, { flexDirection: 'row', alignItems: 'center' }]}>
-          <Feather name="search" size={20} color="#999" style={{ marginRight: 10 }} />
-          <TextInput
-            placeholder="Search for cakes, cupcakes..."
-            placeholderTextColor="#999"
-            style={{ flex: 1, fontSize: 16 }}
-          />
-        </View>
-
-        {/* Cakes Category */}
-        <CategorySection title="Cakes" data={cakes} />
-
-        {/* Cupcakes Category */}
-        <CategorySection title="Cupcakes" data={cupcakes} />
-
-        {/* Add some bottom padding for the navigation */}
-        <View style={{ height: 80 }} />
-      </ScrollView>
-
-      {/* Bottom Navigation */}
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-          alignItems: 'center',
-          paddingVertical: 12,
-          backgroundColor: '#bd194fff',
-          borderTopLeftRadius: 20,
-          borderTopRightRadius: 20,
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-        }}
-      >
-        {bottomTabs.map((tab) => (
-          <TouchableOpacity
-            key={tab.id}
-            style={{
-              alignItems: 'center',
-              padding: 8,
-            }}
-            onPress={() => handleTabPress(tab.id)}
+          <TouchableOpacity 
+            style={styles.cartIcon} 
+            onPress={() => navigation.navigate('Cart')}
           >
-            <Feather 
-              name={tab.icon} 
-              size={24} 
-              color={activeTab === tab.id ? '#FFFFFF' : '#F8BBD9'} 
-            />
-            <Text 
-              style={{ 
-                fontSize: 10, 
-                marginTop: 4,
-                color: activeTab === tab.id ? '#FFFFFF' : '#F8BBD9',
-                fontWeight: activeTab === tab.id ? 'bold' : 'normal'
-              }}
-            >
-              {tab.name}
-            </Text>
+            <Text style={styles.iconText}>🛍️</Text>
           </TouchableOpacity>
-        ))}
+        </View>
       </View>
-    </View>
+
+      {/* Categories Bar */}
+      <View style={styles.categoriesBar}>
+        <TouchableOpacity style={styles.categoryTab} onPress={() => navigation.navigate('Winter')}>
+          <Text style={styles.categoryTabText}>WINTER</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.categoryTab} onPress={() => navigation.navigate('Summer')}>
+          <Text style={styles.categoryTabText}>SUMMER</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.categoryTab} onPress={() => navigation.navigate('Perfumes')}>
+          <Text style={styles.categoryTabText}>FRAGRANCE</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.categoryTab} onPress={() => navigation.navigate('Sale')}>
+          <Text style={styles.categoryTabText}>DEALS</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Top Picks Section */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>FEATURED COLLECTION</Text>
+        
+        {/* Products Grid */}
+        <View style={styles.productsGrid}>
+          {products.map((product) => (
+            <View key={product.id} style={styles.productCard}>
+              <Image 
+                source={product.image} 
+                style={styles.productImage}
+                resizeMode="cover"
+              />
+              <Text style={styles.productTitle}>{product.name}</Text>
+              <Text style={styles.productPrice}>{product.price}</Text>
+              <TouchableOpacity style={styles.addToCartButton}>
+                <Text style={styles.addToCartText}>ADD TO BAG</Text>
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
+      </View>
+    </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FFF8F0',
+  },
+  header: {
+    padding: 20,
+    alignItems: 'center',
+    marginTop: 40,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: '#FFD7BA',
+    elevation: 2,
+    shadowColor: '#E6A875',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  logo: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#8B5A3C',
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    textAlign: 'center',
+  },
+  rightIcons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  iconButton: {
+    padding: 8,
+    borderRadius: 20,
+    marginHorizontal: 4,
+    backgroundColor: '#FFE8D6',
+  },
+  cartIcon: {
+    padding: 8,
+    backgroundColor: '#8B5A3C',
+    borderRadius: 20,
+    marginLeft: 8,
+  },
+  iconText: {
+    fontSize: 18,
+    color: '#8B5A3C',
+  },
+  categoriesBar: {
+    flexDirection: 'row',
+    padding: 15,
+    backgroundColor: '#FFFFFF',
+    marginHorizontal: 10,
+    borderRadius: 12,
+    marginTop: 15,
+    justifyContent: 'space-around',
+    elevation: 2,
+    shadowColor: '#E6A875',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    borderWidth: 1,
+    borderColor: '#FFE8D6',
+  },
+  categoryTab: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+    backgroundColor: '#FFE8D6',
+  },
+  categoryTabText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#8B5A3C',
+  },
+  section: {
+    padding: 20,
+  },
+  sectionTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#8B5A3C',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  productsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  productCard: {
+    width: '48%',
+    backgroundColor: '#FFFFFF',
+    padding: 15,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginBottom: 20,
+    elevation: 3,
+    shadowColor: '#E6A875',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    borderWidth: 1,
+    borderColor: '#FFE8D6',
+  },
+  productImage: {
+    width: 120,
+    height: 120,
+    borderRadius: 10,
+    marginBottom: 12,
+  },
+  productTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#8B5A3C',
+    marginBottom: 5,
+    textAlign: 'center',
+  },
+  productPrice: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#D47C5A',
+    marginBottom: 12,
+  },
+  addToCartButton: {
+    backgroundColor: '#FFC8A2',
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    borderRadius: 8,
+    width: '100%',
+    alignItems: 'center',
+  },
+  addToCartText: {
+    color: '#8B5A3C',
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+});
 
 export default HomeScreen;
